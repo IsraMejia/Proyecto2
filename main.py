@@ -13,17 +13,7 @@ def main():
         PRINT "second line"
         PRINT "and a third"
     """ 
-    codigo = codigo + "\n"   
-    
-
-    '''
-    if len(sys.argv) != 2:
-        sys.exit("Error: Compiler needs source file as argument.")
-    with open(sys.argv[1], 'r') as inputFile:
-        source = inputFile.read()
-    '''
-
-    #codigo = source + "\n"  
+    codigo = codigo + "\n"     
     scanner = Scanner(codigo)
     print(f' A continuacion se muestra el codigo ingresado: \n {codigo} \n\n\nAnalizando ...')
     print("\nSe ha analizado el codigo ingresado, retornando los siguientes tokens:\n")
@@ -39,7 +29,7 @@ def main():
 
     parser = Parser(scanner)
 
-    parser.analizaEstructura() # Start the parser.
+    parser.analizaEstructura()  
     print("Parsing completed.")
 
 main()

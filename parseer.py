@@ -27,7 +27,7 @@ class Parser:
      
     def comparaToken(self, kind):
         if not self.revisarToken(kind):
-            self.terminarSintactico("Expected " + kind.name + ", got " + self.tokenActual.tipoToken.name)
+            self.terminarSintactico("No se encontro " + kind.name + ", el token " + self.tokenActual.tipoToken.name)
         self.siguienteToken()
 
     
@@ -56,7 +56,7 @@ class Parser:
          
         for etiqueta in self.etiquetasGotoed:
             if etiqueta not in self.etiquetasdeclarada:
-                self.terminarSintactico("Attempting to GOTO to undeclarada etiqueta: " + etiqueta)
+                self.terminarSintactico("Intentando saltar a una etiqueta no declarada: " + etiqueta)
 
 
      
@@ -194,8 +194,7 @@ class Parser:
     def terminoMat(self):
         print("TERM")
 
-        self.unario()
-        # Can have 0 or more *// and expresions.
+        self.unario() 
         while self.revisarToken(TipodeTokens.ASTERISCO) or self.revisarToken(TipodeTokens.DIAGONAL):
             self.siguienteToken()
             self.unario()
@@ -230,10 +229,7 @@ class Parser:
     
 
     def nuevaLinea(self):
-        print("NUEVA_LINEA")
-
-        # Require at least one NUEVA_LINEA.
-        self.comparaToken(TipodeTokens.NUEVA_LINEA)
-        # But we will allow extra NUEVA_LINEAs too, of course.
+        print("NUEVA_LINEA") 
+        self.comparaToken(TipodeTokens.NUEVA_LINEA) 
         while self.revisarToken(TipodeTokens.NUEVA_LINEA):
             self.siguienteToken()

@@ -54,8 +54,6 @@ class Scanner:
         self.omitirComentarios()
         token = None
 
-        # Check the first character of this token to see if we can decide what it is.
-        # If it is a multiple character operator (e.g., !=), number, identifier, or keyword, then we will process the rest.
         if self.caracterActual == self.palabras_reservadas['suma'][0]:
             token = Token(self.caracterActual, TipodeTokens.SUMA)
         elif self.caracterActual == self.palabras_reservadas['resta'][0]:
@@ -64,24 +62,21 @@ class Scanner:
             token = Token(self.caracterActual, TipodeTokens.ASTERISCO)
         elif self.caracterActual == self.palabras_reservadas['diagonal'][0] :
             token = Token(self.caracterActual, TipodeTokens.DIAGONAL)
-        elif self.caracterActual == self.palabras_reservadas['asignacion'][0] :
-            # Check whether this token is = or ==
+        elif self.caracterActual == self.palabras_reservadas['asignacion'][0] : 
             if self.sigCaracter() == self.palabras_reservadas['asignacion'][0] :
                 ultimoCaracter = self.caracterActual
                 self.revisaSigCaracter()
                 token = Token(ultimoCaracter + self.caracterActual, TipodeTokens.IGUAL)
             else:
                 token = Token(self.caracterActual, TipodeTokens.ASIGNACION)
-        elif self.caracterActual == self.palabras_reservadas['mayor_que'][0]  :
-            # Check whether this is token is > or >=
+        elif self.caracterActual == self.palabras_reservadas['mayor_que'][0]  : 
             if self.sigCaracter() == self.palabras_reservadas['asignacion'][0] :
                 ultimoCaracter = self.caracterActual
                 self.revisaSigCaracter()
                 token = Token(ultimoCaracter + self.caracterActual, TipodeTokens.GTEQ)
             else:
                 token = Token(self.caracterActual, TipodeTokens.GT)
-        elif self.caracterActual == '<':
-            # Check whether this is token is < or <=
+        elif self.caracterActual == '<': 
             if self.sigCaracter() == self.palabras_reservadas['asignacion'][0] :
                 ultimoCaracter = self.caracterActual
                 self.revisaSigCaracter()
@@ -96,14 +91,11 @@ class Scanner:
             else:
                 self.eTerminarAnalisis("Expected !=, got !" + self.sigCaracter())
 
-        elif self.caracterActual == '\"':
-            # Get characters between quotations.
+        elif self.caracterActual == '\"': 
             self.revisaSigCaracter()
             posicionInicial = self.posicionActual
 
-            while self.caracterActual != '\"':
-                # Don't allow special characters in the string. No escape characters, newlines, tabs, or %.
-                # We will be using C's printf on this string.
+            while self.caracterActual != '\"': 
                 if (self.caracterActual == self.palabras_reservadas['retorno_carro'][0] 
                     or self.palabras_reservadas['salto_linea'][0]
                     or self.palabras_reservadas['sangria'][0]  
@@ -116,26 +108,22 @@ class Scanner:
             textoIdentificado = self.codigo[ posicionInicial : self.posicionActual]  
             token = Token(textoIdentificado, TipodeTokens.STRING)
 
-        elif self.caracterActual.isdigit():
-            # Leading character is a digit, so this must be a number.
-            # Get all consecutive digits and decimal if there is one.
+        elif self.caracterActual.isdigit(): 
             posicionInicial = self.posicionActual
             while self.sigCaracter().isdigit():
                 self.revisaSigCaracter()
-            if self.sigCaracter() == '.': # Decimal!
-                self.revisaSigCaracter()
+            if self.sigCaracter() == '.':  
+                self.revisaSigCaracter() 
 
-                # Must have at least one digit after decimal.
-                if not self.sigCaracter().isdigit(): 
-                    # Error!
+                if not self.sigCaracter().isdigit():  
                     self.eTerminarAnalisis("Illegal character in number.")
                 while self.sigCaracter().isdigit():
                     self.revisaSigCaracter()
 
-            tokText = self.source[posicionInicial : self.posicionActual + 1] # Get the substring.
+            tokText = self.source[posicionInicial : self.posicionActual + 1]  
             token = Token(tokText, TipodeTokens.NUMBER)
 
-        #Reglas para caracteres de texto
+         
         elif self.caracterActual.isalpha(): 
             posicionInicial = self.posicionActual
             while self.revisaSigCaracter().isalnum():
